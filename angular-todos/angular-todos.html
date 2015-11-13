@@ -1,14 +1,50 @@
 <head>
-  <title>angular-todos</title>
+  <title>Todo List</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
+  <div class="container"
+    ng-app="simple-todos"
+    ng-controller="TodosListCtrl">
+    
+    <header>
+      <h1>Todo List ( {{ incompleteCount() }} )</h1>
+      
+      <label class="hide-completed">
+        <input type="checkbox" ng-model="hideCompleted"/>
+        Hide Completed Tasks
+      </label>
+      
+      <login-buttons></login-buttons>
+  
+      <!-- add a form below the h1 -->
+      <form class="new-task" ng-submit="addTask(newTask); newTask='';" ng-show="$root.currentUser">
+        <input ng-model="newTask" type="text"
+               name="text" placeholder="Type to add new tasks" />
+      </form>
+  
+    </header>
+    
+    <ul>
+      <li ng-repeat="todo in todos" 
+        ng-class="{'checked': todo.checked, 'private': todo.private}">
+        <button class="delete" ng-click="deleteTask(todo)">&times;</button>
+ 
+        <input type="checkbox" ng-checked="todo.checked" ng-click="setChecked(todo)" class="toggle-checked" />
+        
+        <button class="toggle-private"
+          ng-if="todo.owner === $root.currentUser._id"
+          ng-click="setPrivate()">
+          {{task.private == true ? "Private" : "Public"}}
+        </button>
+   
+        <span class="text">{{todo.text}}</span>
+        
+        <span class="text">
+          <strong>{{task.username}}</strong> - {{task.text}}
+        </span>
+      </li>
+    </ul>
+    
+  </div>
 </body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
